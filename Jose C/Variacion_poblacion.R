@@ -29,19 +29,16 @@ grafico_cambio_poblacional <- ggplot(data = variacion_total_porcentual,
   scale_y_continuous(labels = scales::percent_format(scale = 1)) +
   labs(
     x = "Año",
-    y = "Cambio porcentual",
-    title = "Cambio porcentual año a año\nen la población de Costa Rica desde el año 2000 a 2024"
+    y = "Cambio porcentual"
   ) +
-  theme_minimal() +
+  
+  theme_minimal() +  
   theme(
-    axis.title.y = element_text(vjust = -0.5, size = rel(1), angle = 90),
+    axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom",
-    plot.title = element_text(
-      hjust = 0.5,   # Centrar el título
-      face = "bold", # Negrita
-      size = 14      # Ajusta el tamaño a tu preferencia
-    )
+    plot.margin = margin(t = 10, r = 5, b = 10, l = 5)
   )
+
 
 
 
@@ -89,21 +86,20 @@ g_proyeccion_poblacional <- ggplot(data = df_final_proyeccion,
   labs(
     x = "Año",
     y = "Cantidad de personas (En millones)",
-    title = "Población de Costa Rica por grupo de edad\ndesde el año 2010 al año 2079"  # Título en dos líneas
+    #title = "Población de Costa Rica por grupo de edad\ndesde el año 2010 al año 2079"  # Título en dos líneas
   ) +
-  theme_minimal() +
+  theme_minimal() +  
   theme(
-    axis.title.y = element_text(vjust = -0.5, size = rel(1), angle = 90),
+    axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom",
-    plot.title = element_text(
-      hjust = 0.5,   # Centrar el título
-      face = "bold", # En negrita
-      size = 14      # Ajusta el tamaño según prefieras
-    )
+    plot.margin = margin(t = 10, r = 5, b = 10, l = 5)
   )
 
-ggsave(filename = "Cambio_Poblacional.pdf",plot = grafico_cambio_poblacional)
 
-ggsave(filename = "Proyeccion_Poblacional.pdf",plot = g_proyeccion_poblacional)
+df_final_proyeccion$Año %>% unique()
+
+ggsave(filename = "Cambio_Poblacional.pdf",plot = grafico_cambio_poblacional, bg = "white")
+
+ggsave(filename = "Proyeccion_Poblacional.pdf",plot = g_proyeccion_poblacional, bg = "white")
 
 

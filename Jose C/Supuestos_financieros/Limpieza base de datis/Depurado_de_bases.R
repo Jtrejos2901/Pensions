@@ -34,8 +34,36 @@ Salarios<-Salarios[SumInd_Salarios>0,]
 #Se revisa la base en busqueda de salarios inferiores al mínimo 
 
 IPC<- read_excel("/Users/joseandres/Desktop/Pensiones/Pensions/Jose C/Supuestos_financieros/Limpieza base de datis/IPC_historico.xlsx")
+
+# Crear vector de nombres de meses en español
+meses_es <- c("enero", "febrero", "marzo", "abril", "mayo", "junio",
+              "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre")
+
+# Convertir la columna de fecha (ej: "Enero/1995") a fecha real
+IPC <- IPC %>%
+  mutate(
+    # Convertir a minúsculas por seguridad
+    fecha_str = tolower(Fecha),
+    # Separar mes y año
+    mes = match(str_extract(fecha_str, "^[^/]+"), meses_es),
+    año = as.integer(str_extract(fecha_str, "[0-9]{4}")),
+    # Crear fecha como "YYYY-MM-01"
+    fecha_real = as.Date(paste(año, mes, "01", sep = "-")),
+    # Calcular factor mensual
+    factor_mensual = 1 + (`Variacion_mensual` / 100)
+  )
+
+# Calcular el IPC anual compuesto
+ipc_anual <- IPC %>%
+  group_by(año) %>%
+  summarise(
+    IPC_anual = (prod(factor_mensual) - 1) * 100
+  ) %>%
+  arrange(año)
+
+
 #Factores de ajuste 
-Factores_ajuste<-1/(1+IPC$Nivel)
+Factores_ajuste<-1/(1+ipc_anual$IPC_anual)
 Factores_ajuste<-c(Factores_ajuste[-1],1)
 Factores_ajuste<-Factores_ajuste[30:1]
 Factores_acum<-cumprod(Factores_ajuste)

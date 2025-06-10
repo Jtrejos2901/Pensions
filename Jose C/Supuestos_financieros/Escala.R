@@ -5,8 +5,11 @@ library(cowplot)
 library(lubridate)
 setwd("/Users/joseandres/Desktop/Pensiones/Pensions/Jose C/Bases_profe")
 Activos <- read_csv("Activos.csv")
+inactivos <- read_csv("Inactivos.csv")
 Antiguedades <- 2025-Activos$Año_ingreso
 Activos <- Activos[,11:370]
+
+ setdiff(colnames(Activos), colnames(inactivos))
 
 IPC<- read_excel("/Users/joseandres/Desktop/Pensiones/Pensions/Jose C/Supuestos_financieros/Limpieza base de datis/IPC_historico.xlsx")
 
